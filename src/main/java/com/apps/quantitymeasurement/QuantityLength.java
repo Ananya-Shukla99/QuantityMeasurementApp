@@ -19,32 +19,45 @@ public class QuantityLength {
 		this.unit = unit;
 	}
 
-	// method convert to base unit
-	private double convertToBaseUnit() {
-		return this.value * unit.getConversionFactor();
-	}
+	// Method to convert the given length to base unit (Inches)
+    private double convertToBaseUnit() {
+        return this.value * unit.getConversionFactor();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
+    // Overriding equals method to compare two QuantityLength objects
+    @Override
+    public boolean equals(Object obj) {
 
-		if (this == obj)
-			return true;
+        // Checking same reference - Reflexive property
+        if (this == obj)
+            return true;
 
-		if (obj == null || getClass() != obj.getClass())
-			return false;
+        // Checking null and class type
+        if (obj == null || getClass() != obj.getClass())
+            return false;
 
-		QuantityLength other = (QuantityLength) obj;
+        // Type casting
+        QuantityLength other = (QuantityLength) obj;
 
-		return Double.compare(this.convertToBaseUnit(), other.convertToBaseUnit()) == 0;
-	}
+        // Comparing values after converting to base unit
+        double difference = Math.abs(
+                this.convertToBaseUnit() - other.convertToBaseUnit()
+        );
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(convertToBaseUnit());
-	}
+        return difference < 0.0001;
+    }
 
-	@Override
-	public String toString() {
-		return "Quantity(" + value + ", " + unit + ")";
-	}
+    // Overriding hashCode method - consistent with equals 
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(Math.round(convertToBaseUnit() * 10000));
+    }
+
+    // Overriding toString method for readable output
+    @Override
+    public String toString() {
+        return "Quantity(" + value + ", " + unit + ")";
+    }
+
 }
