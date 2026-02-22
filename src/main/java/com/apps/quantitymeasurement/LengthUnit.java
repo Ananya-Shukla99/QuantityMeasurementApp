@@ -16,4 +16,5 @@ public enum LengthUnit {
 	public double getConversionFactor() {
 		return conversionFactor;
 	}
+	
 }
