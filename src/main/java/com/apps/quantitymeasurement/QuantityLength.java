@@ -24,6 +24,31 @@ public class QuantityLength {
 		return this.value * unit.getConversionFactor();
 	}
 
+	// Addition method
+	public QuantityLength add(QuantityLength other) {
+
+		// Checking null value
+		if (other == null) {
+			throw new IllegalArgumentException("Second operand cannot be null");
+		}
+
+		// Checking if value is finite
+		if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
+			throw new IllegalArgumentException("Values must be finite");
+		}
+
+		// Converting to base unit
+		double thisBase = this.convertToBaseUnit();
+		double otherBase = other.convertToBaseUnit();
+
+		double sumBase = thisBase + otherBase;
+
+		double resultValue = sumBase / this.unit.getConversionFactor();
+
+		// returning result value
+		return new QuantityLength(resultValue, this.unit);
+	}
+
 	// Static method to convert to target type
 	public static double convert(double value, LengthUnit source, LengthUnit target) {
 
@@ -43,13 +68,14 @@ public class QuantityLength {
 		return baseValue / target.getConversionFactor();
 	}
 
-	// Instance conversion method 
+	// Instance conversion method
 	public QuantityLength convertTo(LengthUnit target) {
 
-        double convertedValue = convert(this.value, this.unit, target);
+		double convertedValue = convert(this.value, this.unit, target);
 
-        return new QuantityLength(convertedValue, target);
-    }
+		return new QuantityLength(convertedValue, target);
+	}
+
 	// Overriding equals method to compare two QuantityLength objects
 	@Override
 	public boolean equals(Object obj) {
