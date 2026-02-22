@@ -3,11 +3,16 @@ package com.apps.quantitymeasurement;
 public class Feet {
 
 	// Attributes
-	public double value;
+	private final double value;
 
 	// Constructor
 	public Feet(double value) {
 		this.value = value;
+	}
+
+	// Getter
+	public double getValue() {
+		return value;
 	}
 
 	@Override
@@ -23,6 +28,11 @@ public class Feet {
 		Feet feet = (Feet) obj;
 
 		return Double.compare(this.value, feet.value) == 0;
+	}
+
+	@Override
+	public int hashCode() {
+		return Double.hashCode(value);
 	}
 
 }
