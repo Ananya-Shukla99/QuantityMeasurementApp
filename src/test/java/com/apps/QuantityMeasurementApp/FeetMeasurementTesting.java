@@ -3,6 +3,7 @@ package com.apps.QuantityMeasurementApp;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import com.apps.quantitymeasurement.Feet;
+import com.apps.quantitymeasurement.QuantityMeasurementApp;
 
 //Test Class
 public class FeetMeasurementTesting {
@@ -10,20 +11,18 @@ public class FeetMeasurementTesting {
 	// Checking same value
 	@Test
 	public void testEquality_SameValue() {
-		Feet f1 = new Feet(0.1);
-		Feet f2 = new Feet(0.1);
+		boolean result = QuantityMeasurementApp.areFeetEqual(0.1, 0.1);
 
-		assertEquals(true, f1.equals(f2));
+		assertEquals(true, result);
 	}
 
 	// Checking different values
 	@Test
 	public void testEquality_DifferentValue() {
 
-		Feet f1 = new Feet(0.1);
-		Feet f2 = new Feet(0.2);
+		boolean result = QuantityMeasurementApp.areFeetEqual(0.2, 0.1);
 
-		assertEquals(false, f1.equals(f2));
+		assertEquals(false, result);
 	}
 
 	// Checking the null value comparison
