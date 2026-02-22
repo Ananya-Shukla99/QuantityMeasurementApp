@@ -1,22 +1,32 @@
 package com.apps.quantitymeasurement;
 
-import java.util.Scanner;
-
 public class QuantityMeasurementApp {
+
+	// Static method for comparing feet
+	public static boolean areFeetEqual(double value1, double value2) {
+		Feet f1 = new Feet(value1);
+		Feet f2 = new Feet(value2);
+		return f1.equals(f2);
+	}
+
+	// Static method for comparing inches
+	public static boolean areInchesEqual(double value1, double value2) {
+		Inches i1 = new Inches(value1);
+		Inches i2 = new Inches(value2);
+		return i1.equals(i2);
+	}
+
 	public static void main(String[] args) {
 
-		Scanner sc = new Scanner(System.in);
-		double value = sc.nextDouble();
-		double value2 = sc.nextDouble();
-		Feet f1 = new Feet(value);
-		Feet f2 = new Feet(value2);
+		// Comparing two feet value
+		boolean feetResult = areFeetEqual(1.0, 1.0);
+		System.out.println("Input values : 1.0 ft and 1.0 ft");
+		System.out.println("Output: Equal " + feetResult );
 
-		boolean flag = f1.equals(f2);
-		if (flag) {
-			System.out.println(value + " is equals to" + value2);
-		} else {
-			System.out.println(value + " is not equals to" + value2);
-		}
-		sc.close();
+		// Comparing two Inches value
+		boolean inchResult = areInchesEqual(1.0, 1.0);
+		System.out.println("Input values : 1.0 inch and 1.0 inch");
+		System.out.println("Output: Equal " + inchResult );
+
 	}
 }
