@@ -24,29 +24,34 @@ public class QuantityLength {
 		return this.value * unit.getConversionFactor();
 	}
 
-	// Addition method
-	public QuantityLength add(QuantityLength other) {
+	// Addition method with flexible targetUnit 
+	public QuantityLength add(QuantityLength other, LengthUnit targetUnit) {
 
-		// Checking null value
-		if (other == null) {
-			throw new IllegalArgumentException("Second operand cannot be null");
-		}
+		// Checking null operand
+	    if (other == null) {
+	        throw new IllegalArgumentException("Second operand cannot be null");
+	    }
 
-		// Checking if value is finite
-		if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
-			throw new IllegalArgumentException("Values must be finite");
-		}
+	    // Checking target unit 
+	    if (targetUnit == null) {
+	        throw new IllegalArgumentException("Target unit cannot be null");
+	    }
 
-		// Converting to base unit
-		double thisBase = this.convertToBaseUnit();
-		double otherBase = other.convertToBaseUnit();
+	    // Checking Finite value 
+	    if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
+	        throw new IllegalArgumentException("Values must be finite");
+	    }
 
-		double sumBase = thisBase + otherBase;
+	    // Convert both operands to base unit (inches)
+	    double baseValue1 = this.convertToBaseUnit();
+	    double baseValue2 = other.convertToBaseUnit();
 
-		double resultValue = sumBase / this.unit.getConversionFactor();
+	    double sumBase = baseValue1 + baseValue2;
 
-		// returning result value
-		return new QuantityLength(resultValue, this.unit);
+	    // Convert result to explicit target unit
+	    double resultValue = sumBase / targetUnit.getConversionFactor();
+
+	    return new QuantityLength(resultValue, targetUnit);
 	}
 
 	// Static method to convert to target type
