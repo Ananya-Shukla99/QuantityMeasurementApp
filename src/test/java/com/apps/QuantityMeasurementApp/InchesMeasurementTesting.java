@@ -3,6 +3,7 @@ package com.apps.QuantityMeasurementApp;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import com.apps.quantitymeasurement.Inches;
+import com.apps.quantitymeasurement.QuantityMeasurementApp;
 
 // Test Class
 public class InchesMeasurementTesting {
@@ -10,19 +11,17 @@ public class InchesMeasurementTesting {
     // Checking same value
     @Test
     public void testEquality_SameValue() {
-        Inches i1 = new Inches(0.1);
-        Inches i2 = new Inches(0.1);
-
-        assertEquals(true, i1.equals(i2));
+    	
+        boolean result = QuantityMeasurementApp.areInchesEqual(0.1, 0.1);
+        assertEquals(true, result);
     }
 
     // Checking different values
     @Test
     public void testEquality_DifferentValue() {
-        Inches i1 = new Inches(0.1);
-        Inches i2 = new Inches(0.2);
-
-        assertEquals(false, i1.equals(i2));
+       
+        boolean result = QuantityMeasurementApp.areInchesEqual(0.1, 0.2);
+        assertEquals(false, result);
     }
 
     // Checking the null value comparison
@@ -34,7 +33,8 @@ public class InchesMeasurementTesting {
     }
 
     // Checking non numeric value
-    @Test
+  
+	@Test
     public void testEquality_NonNumericInput() {
         Inches i1 = new Inches(0.1);
 
@@ -48,4 +48,5 @@ public class InchesMeasurementTesting {
 
         assertEquals(true, i.equals(i));
     }
+    
 }
