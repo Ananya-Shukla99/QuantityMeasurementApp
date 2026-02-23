@@ -111,6 +111,70 @@ public class Quantity<U extends IMeasurable> {
 		return Double.compare(round(thisBase), round(thatBase)) == 0;
 	}
 
+	// Subtracts another quantity from this quantity
+	public Quantity<U> subtract(Quantity<U> other) {
+		return subtract(other, this.unit);
+	}
+
+	// Subtraction method with explicit target unit
+	public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
+
+		// Checking null operand
+		if (other == null)
+			throw new IllegalArgumentException("Cannot subtract null quantity");
+
+		// Checking null target unit
+		if (targetUnit == null)
+			throw new IllegalArgumentException("Target unit cannot be null");
+
+		// Ensuring both quantities belong to same measurement category
+		if (this.unit.getClass() != other.unit.getClass())
+			throw new IllegalArgumentException("Incompatible measurement categories");
+
+		// Checking finite values
+		if (!Double.isFinite(this.value) || !Double.isFinite(other.value))
+			throw new IllegalArgumentException("Invalid numeric value");
+
+		// Convert both quantities to base unit
+		double base1 = this.unit.convertToBaseUnit(this.value);
+		double base2 = other.unit.convertToBaseUnit(other.value);
+
+		// Subtract in base unit
+		double differenceBase = base1 - base2;
+
+		// Convert result back to target unit
+		double result = targetUnit.convertFromBaseUnit(differenceBase);
+
+		return new Quantity<>(round(result), targetUnit);
+	}
+
+	// Division method - returns dimensionless ratio
+	public double divide(Quantity<U> other) {
+
+		// Checking null operand
+		if (other == null)
+			throw new IllegalArgumentException("Cannot divide by null quantity");
+
+		// Ensuring both quantities belong to same measurement category
+		if (this.unit.getClass() != other.unit.getClass())
+			throw new IllegalArgumentException("Incompatible measurement categories");
+
+		// Checking finite values
+		if (!Double.isFinite(this.value) || !Double.isFinite(other.value))
+			throw new IllegalArgumentException("Invalid numeric value");
+
+		// Convert both quantities to base unit
+		double base1 = this.unit.convertToBaseUnit(this.value);
+		double base2 = other.unit.convertToBaseUnit(other.value);
+
+		// Prevent division by zero
+		if (base2 == 0)
+			throw new ArithmeticException("Division by zero");
+
+		// Return dimension less result
+		return round(base1 / base2);
+	}
+
 	// Overriding hashCode method - consistent with equals
 	@Override
 	public int hashCode() {
@@ -130,5 +194,17 @@ public class Quantity<U extends IMeasurable> {
 	// Private helper method to round values to 2 decimal places
 	private double round(double value) {
 		return Math.round(value * ROUNDING_FACTOR) / ROUNDING_FACTOR;
+	}
+
+	public Object divide(Object other) {
+		return divide(other, this.unit);
+	}
+
+	private Object divide(Object other, U unit2) {
+		return null;
+	}
+
+	public Object subtract(Object other) {
+		return null;
 	}
 }
