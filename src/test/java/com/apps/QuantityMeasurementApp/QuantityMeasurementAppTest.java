@@ -437,4 +437,103 @@ class QuantityMeasurementAppTest {
 
 		assertEquals(new Quantity<>(10.0, LengthUnit.FEET), original);
 	}
+
+	// ================= UC12 REFACTOR VALIDATION =================
+
+	@Test
+	void testAdd_UsesBaseConversionCorrectly() {
+		Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
+		Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCH);
+
+		assertEquals(new Quantity<>(2.0, LengthUnit.FEET), feet.add(inches));
+	}
+
+	@Test
+	void testSubtract_UsesBaseConversionCorrectly() {
+		Quantity<LengthUnit> feet = new Quantity<>(2.0, LengthUnit.FEET);
+		Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCH);
+
+		assertEquals(new Quantity<>(1.0, LengthUnit.FEET), feet.subtract(inches));
+	}
+
+	@Test
+	void testDivide_UsesBaseConversionCorrectly() {
+		Quantity<LengthUnit> feet = new Quantity<>(2.0, LengthUnit.FEET);
+		Quantity<LengthUnit> inches = new Quantity<>(24.0, LengthUnit.INCH);
+
+		assertEquals(1.0, feet.divide(inches), EPSILON);
+	}
+
+	// VALIDATION CONSISTENCY
+
+	@Test
+	void testOperations_NullOperand_ConsistentMessage() {
+		Quantity<LengthUnit> q = new Quantity<>(10.0, LengthUnit.FEET);
+
+		assertThrows(IllegalArgumentException.class, () -> q.add(null));
+		assertThrows(IllegalArgumentException.class, () -> q.subtract(null));
+		assertThrows(IllegalArgumentException.class, () -> q.divide(null));
+	}
+
+	@Test
+	void testOperations_CrossCategory_Rejected() {
+		Quantity<LengthUnit> length = new Quantity<>(1.0, LengthUnit.FEET);
+		Quantity<WeightUnit> weight = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+
+		assertThrows(IllegalArgumentException.class, () -> length.add((Quantity) weight));
+		assertThrows(IllegalArgumentException.class, () -> length.subtract((Quantity) weight));
+		assertThrows(IllegalArgumentException.class, () -> length.divide((Quantity) weight));
+	}
+
+	// ROUNDING BEHAVIOR
+
+	@Test
+	void testAddition_RoundsToTwoDecimals() {
+		Quantity<LengthUnit> a = new Quantity<>(1.333, LengthUnit.FEET);
+		Quantity<LengthUnit> b = new Quantity<>(1.333, LengthUnit.FEET);
+
+		Quantity<LengthUnit> result = a.add(b);
+
+		assertEquals(2.67, result.getValue(), EPSILON);
+	}
+
+	@Test
+	void testSubtraction_RoundsToTwoDecimals() {
+		Quantity<LengthUnit> a = new Quantity<>(5.555, LengthUnit.FEET);
+		Quantity<LengthUnit> b = new Quantity<>(2.222, LengthUnit.FEET);
+
+		Quantity<LengthUnit> result = a.subtract(b);
+
+		assertEquals(3.33, result.getValue(), EPSILON);
+	}
+
+	// ENUM OPERATION VALIDATION
+
+	@Test
+	void testDivide_ByZero_ThrowsException() {
+		Quantity<LengthUnit> a = new Quantity<>(10.0, LengthUnit.FEET);
+		Quantity<LengthUnit> b = new Quantity<>(0.0, LengthUnit.FEET);
+
+		assertThrows(ArithmeticException.class, () -> a.divide(b));
+	}
+
+	// IMMUTABILITY CHECK
+
+	@Test
+	void testAdd_DoesNotModifyOriginalObjects() {
+		Quantity<LengthUnit> original = new Quantity<>(5.0, LengthUnit.FEET);
+		original.add(new Quantity<>(5.0, LengthUnit.FEET));
+
+		assertEquals(new Quantity<>(5.0, LengthUnit.FEET), original);
+	}
+
+	// CHAIN OPERATIONS
+
+	@Test
+	void testChainOperations_WorkCorrectly() {
+		Quantity<LengthUnit> result = new Quantity<>(10.0, LengthUnit.FEET).add(new Quantity<>(2.0, LengthUnit.FEET))
+				.subtract(new Quantity<>(12.0, LengthUnit.INCH));
+
+		assertEquals(new Quantity<>(11.0, LengthUnit.FEET), result);
+	}
 }
