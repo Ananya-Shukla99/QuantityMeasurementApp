@@ -8,7 +8,6 @@ public class QuantityMeasurementApp {
 	}
 
 	// GENERIC DEMONSTRATION METHODS
-
 	// Equality demonstration
 	public static <U extends IMeasurable> boolean demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {
 

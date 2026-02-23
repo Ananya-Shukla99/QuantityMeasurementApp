@@ -518,7 +518,7 @@ class QuantityMeasurementAppTest {
 	}
 
 	// IMMUTABILITY CHECK
-
+	 
 	@Test
 	void testAdd_DoesNotModifyOriginalObjects() {
 		Quantity<LengthUnit> original = new Quantity<>(5.0, LengthUnit.FEET);
