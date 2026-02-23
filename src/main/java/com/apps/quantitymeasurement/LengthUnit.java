@@ -1,28 +1,34 @@
 package com.apps.quantitymeasurement;
 
-public enum LengthUnit {
+public enum LengthUnit implements IMeasurable {
 
 	INCH(1.0), FEET(12.0), YARDS(36.0), CENTIMETERS(0.393701);
 
+	// relative to gram conversion factor
 	private final double conversionFactor;
 
+	// constructor
 	LengthUnit(double conversionFactor) {
 		this.conversionFactor = conversionFactor;
 	}
 
-	// Returns conversion factor relative to base unit
+	@Override
 	public double getConversionFactor() {
 		return conversionFactor;
 	}
 
-	// Convert given value to base unit
+	@Override
 	public double convertToBaseUnit(double value) {
 		return value * conversionFactor;
 	}
 
-	// Convert from base unit to current unit
+	@Override
 	public double convertFromBaseUnit(double baseValue) {
 		return baseValue / conversionFactor;
 	}
 
+	@Override
+	public String getUnitName() {
+		return this.name();
+	}
 }
