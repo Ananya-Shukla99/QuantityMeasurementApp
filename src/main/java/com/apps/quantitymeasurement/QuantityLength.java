@@ -15,43 +15,40 @@ public class QuantityLength {
 			throw new IllegalArgumentException("Unit cannot be null");
 		}
 
+		if (!Double.isFinite(value))
+			throw new IllegalArgumentException("Value must be finite");
+
 		this.value = value;
 		this.unit = unit;
 	}
 
-	// Method to convert the given length to base unit (Inches)
+	// Method to convert the given length to base unit
 	private double convertToBaseUnit() {
-		return this.value * unit.getConversionFactor();
+		return unit.convertToBaseUnit(value);
 	}
 
-	// Addition method with flexible targetUnit 
+	// Addition method with flexible targetUnit
 	public QuantityLength add(QuantityLength other, LengthUnit targetUnit) {
 
 		// Checking null operand
-	    if (other == null) {
-	        throw new IllegalArgumentException("Second operand cannot be null");
-	    }
+		if (other == null) {
+			throw new IllegalArgumentException("Second operand cannot be null");
+		}
 
-	    // Checking target unit 
-	    if (targetUnit == null) {
-	        throw new IllegalArgumentException("Target unit cannot be null");
-	    }
+		// Checking target unit
+		if (targetUnit == null) {
+			throw new IllegalArgumentException("Target unit cannot be null");
+		}
 
-	    // Checking Finite value 
-	    if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
-	        throw new IllegalArgumentException("Values must be finite");
-	    }
+		// Checking Finite value
+		if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
+			throw new IllegalArgumentException("Values must be finite");
+		}
 
-	    // Convert both operands to base unit (inches)
-	    double baseValue1 = this.convertToBaseUnit();
-	    double baseValue2 = other.convertToBaseUnit();
+		double sumBase = this.convertToBaseUnit() + other.convertToBaseUnit();
+		double resultValue = targetUnit.convertFromBaseUnit(sumBase);
 
-	    double sumBase = baseValue1 + baseValue2;
-
-	    // Convert result to explicit target unit
-	    double resultValue = sumBase / targetUnit.getConversionFactor();
-
-	    return new QuantityLength(resultValue, targetUnit);
+		return new QuantityLength(resultValue, targetUnit);
 	}
 
 	// Static method to convert to target type
@@ -66,17 +63,20 @@ public class QuantityLength {
 			throw new IllegalArgumentException("Value must be finite");
 		}
 
-		// Normalize to base unit
-		double baseValue = value * source.getConversionFactor();
+		double baseValue = source.convertToBaseUnit(value);
 
-		// Convert to target unit
-		return baseValue / target.getConversionFactor();
+		return target.convertFromBaseUnit(baseValue);
 	}
 
 	// Instance conversion method
 	public QuantityLength convertTo(LengthUnit target) {
 
-		double convertedValue = convert(this.value, this.unit, target);
+		if (target == null)
+			throw new IllegalArgumentException("Target unit cannot be null");
+
+		double baseValue = convertToBaseUnit();
+
+		double convertedValue = target.convertFromBaseUnit(baseValue);
 
 		return new QuantityLength(convertedValue, target);
 	}
@@ -91,6 +91,9 @@ public class QuantityLength {
 
 		// Checking null and class type
 		if (obj == null || getClass() != obj.getClass())
+			return false;
+
+		if (!(obj instanceof QuantityLength))
 			return false;
 
 		// Type casting
