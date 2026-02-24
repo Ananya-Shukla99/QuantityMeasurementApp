@@ -165,7 +165,7 @@ public class QuantityMeasurementApp {
 		demonstrateSubtraction(volume1, volume2);
 		demonstrateDivision(volume1, volume2);
 
-		demonstrateSubtraction(volume1, volume3);
+		demonstrateSubtraction(volume1, volume3); 
 		demonstrateDivision(volume1, volume3);
 		System.out.println("***********************************************");
 
