@@ -42,3 +42,20 @@ The scope must remain limited to the current use case requirements.
 Over-engineering or prematurely adding features reduces maintainability and clarity, especially in enterprise environments where domain knowledge may not always be fully available.
 
 ---
+
+## UC1: Feet Measurement Equality
+
+## Description
+Checks equality of two numerical values in feet, handling null, type mismatch, and floating-point precision.
+
+## Flow
+1. Input two numerical values in feet.
+2. Validate inputs are numeric.
+3. Compare for equality → return `true` or `false`.
+
+## Key Concepts
+- Override `equals()` using `Double.compare()` instead of `==`
+- `private final` field for immutability
+- Null & type safety to prevent exceptions
+
+---
