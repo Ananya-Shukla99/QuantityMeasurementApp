@@ -42,7 +42,6 @@ The scope must remain limited to the current use case requirements.
 Over-engineering or prematurely adding features reduces maintainability and clarity, especially in enterprise environments where domain knowledge may not always be fully available.
 
 ---
----
 
 ## UC14: Temperature Measurement (Non-Linear Units & Arithmetic Restrictions)
 
