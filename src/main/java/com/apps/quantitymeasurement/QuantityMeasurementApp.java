@@ -78,8 +78,7 @@ public class QuantityMeasurementApp {
 	}
 
 	// Subtraction demonstration
-	public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
-			Quantity<U> q1, Quantity<U> q2) {
+	public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(Quantity<U> q1, Quantity<U> q2) {
 
 		if (q1 == null || q2 == null) {
 			throw new IllegalArgumentException("Quantities cannot be null");
@@ -91,10 +90,9 @@ public class QuantityMeasurementApp {
 
 		return result;
 	}
-	
+
 	// Division demonstration
-	public static <U extends IMeasurable> double demonstrateDivision(
-			Quantity<U> q1, Quantity<U> q2) {
+	public static <U extends IMeasurable> double demonstrateDivision(Quantity<U> q1, Quantity<U> q2) {
 
 		if (q1 == null || q2 == null) {
 			throw new IllegalArgumentException("Quantities cannot be null");
@@ -106,7 +104,7 @@ public class QuantityMeasurementApp {
 
 		return result;
 	}
-	
+
 	
 	// MAIN METHOD
 	public static void main(String[] args) {
@@ -122,10 +120,10 @@ public class QuantityMeasurementApp {
 		demonstrateAddition(length1, length2);
 		demonstrateAddition(length1, length2, LengthUnit.FEET);
 
-		// new updated methods 
+		// new updated methods
 		demonstrateSubtraction(length1, length2);
 		demonstrateDivision(length1, length2);
-		
+
 		// Weight method
 		System.out.println("***********************************************");
 		Quantity<WeightUnit> weight1 = new Quantity<>(1.0, WeightUnit.KILOGRAM);
@@ -141,11 +139,11 @@ public class QuantityMeasurementApp {
 		demonstrateAddition(weight1, weight3, WeightUnit.GRAM);
 		demonstrateRoundTrip(weight1, WeightUnit.POUND);
 
-		// new updates 
+		// new updates
 		demonstrateSubtraction(weight1, weight3);
 		demonstrateDivision(weight1, weight3);
-		
-		// Volume method 
+
+		// Volume method
 		System.out.println("***********************************************");
 		Quantity<VolumeUnit> volume1 = new Quantity<>(1.0, VolumeUnit.LITRE);
 
@@ -169,5 +167,35 @@ public class QuantityMeasurementApp {
 		demonstrateDivision(volume1, volume3);
 		System.out.println("***********************************************");
 
+
+		Quantity<TemperatureUnit> temp1 = new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+		Quantity<TemperatureUnit> temp2 = new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+
+		demonstrateEquality(temp1, temp2);
+		demonstrateConversion(temp1, TemperatureUnit.FAHRENHEIT);
+
+		Quantity<TemperatureUnit> temp3 = new Quantity<>(273.15, TemperatureUnit.KELVIN);
+
+		try {
+		    demonstrateAddition(temp1, temp3, TemperatureUnit.CELSIUS);
+		} catch (UnsupportedOperationException e) {
+		    System.out.println(e.getMessage());
+		}
+
+		try {
+		    demonstrateSubtraction(temp3, temp1);
+		} catch (UnsupportedOperationException e) {
+		    System.out.println(e.getMessage());
+		}
+
+		try {
+		    demonstrateDivision(temp3, temp1.convertTo(TemperatureUnit.KELVIN));
+		} catch (UnsupportedOperationException e) {
+		    System.out.println(e.getMessage());
+		}
+		
+		System.out.println("***********************************************");
+
 	}
+
 }
