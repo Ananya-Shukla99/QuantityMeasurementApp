@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Quantity<U extends IMeasurable> {
 
-	// Constant for floating point rounding precision (2 decimal places)
+	// Constant for floating point rounding precision
 	private static final double ROUNDING_FACTOR = 100.0;
 
 	// Attributes
@@ -24,8 +24,7 @@ public class Quantity<U extends IMeasurable> {
 		this.unit = unit;
 	}
 
-	// Arithmetic Operation Enum (UC13)
-
+	// Arithmetic Operation Enum
 	private enum ArithmeticOperation {
 
 		ADD {
@@ -50,7 +49,6 @@ public class Quantity<U extends IMeasurable> {
 	}
 
 	// Getters
-
 	public double getValue() {
 		return value;
 	}
@@ -59,7 +57,7 @@ public class Quantity<U extends IMeasurable> {
 		return unit;
 	}
 
-	// Centralized Validation (UC13)
+	// Centralized Validation
 	private void validateArithmeticOperands(Quantity<U> other, U targetUnit, boolean targetUnitRequired) {
 
 		if (other == null)
@@ -75,7 +73,12 @@ public class Quantity<U extends IMeasurable> {
 			throw new IllegalArgumentException("Target unit cannot be null");
 	}
 
-	// Core Arithmetic Helper (UC13)
+	// 🔥 UC14: Validate arithmetic support before execution
+	private void validateOperationSupport(ArithmeticOperation operation) {
+		unit.validateOperationSupport(operation.name());
+	}
+
+	// Core Arithmetic Helper
 	private double performBaseArithmetic(Quantity<U> other, ArithmeticOperation operation) {
 
 		double baseValue1 = unit.convertToBaseUnit(value);
@@ -98,11 +101,12 @@ public class Quantity<U extends IMeasurable> {
 
 		return new Quantity<>(round(converted), targetUnit);
 	}
-	 
+
 	// ADD
 	public Quantity<U> add(Quantity<U> other) {
 
 		validateArithmeticOperands(other, null, false);
+		validateOperationSupport(ArithmeticOperation.ADD);
 
 		double baseResult = performBaseArithmetic(other, ArithmeticOperation.ADD);
 		double result = unit.convertFromBaseUnit(baseResult);
@@ -113,6 +117,7 @@ public class Quantity<U extends IMeasurable> {
 	public Quantity<U> add(Quantity<U> other, U targetUnit) {
 
 		validateArithmeticOperands(other, targetUnit, true);
+		validateOperationSupport(ArithmeticOperation.ADD);
 
 		double baseResult = performBaseArithmetic(other, ArithmeticOperation.ADD);
 		double result = targetUnit.convertFromBaseUnit(baseResult);
@@ -124,6 +129,7 @@ public class Quantity<U extends IMeasurable> {
 	public Quantity<U> subtract(Quantity<U> other) {
 
 		validateArithmeticOperands(other, null, false);
+		validateOperationSupport(ArithmeticOperation.SUBTRACT);
 
 		double baseResult = performBaseArithmetic(other, ArithmeticOperation.SUBTRACT);
 		double result = unit.convertFromBaseUnit(baseResult);
@@ -134,7 +140,7 @@ public class Quantity<U extends IMeasurable> {
 	public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
 
 		validateArithmeticOperands(other, targetUnit, true);
-
+		validateOperationSupport(ArithmeticOperation.SUBTRACT);
 		double baseResult = performBaseArithmetic(other, ArithmeticOperation.SUBTRACT);
 		double result = targetUnit.convertFromBaseUnit(baseResult);
 
@@ -145,13 +151,14 @@ public class Quantity<U extends IMeasurable> {
 	public double divide(Quantity<U> other) {
 
 		validateArithmeticOperands(other, null, false);
+		validateOperationSupport(ArithmeticOperation.DIVIDE);
 
 		double result = performBaseArithmetic(other, ArithmeticOperation.DIVIDE);
 
 		return round(result);
 	}
 
-	// equals & hashCode
+	// equals & hashCode (No change)
 	@Override
 	public boolean equals(Object obj) {
 
@@ -176,7 +183,6 @@ public class Quantity<U extends IMeasurable> {
 	public int hashCode() {
 
 		double baseValue = round(unit.convertToBaseUnit(value));
-
 		return Objects.hash(baseValue, unit.getClass());
 	}
 

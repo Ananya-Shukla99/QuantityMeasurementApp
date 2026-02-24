@@ -15,19 +15,13 @@ public enum VolumeUnit implements IMeasurable {
         this.conversionFactor = conversionFactor;
     }
 
-    // Returns conversion factor relative to base unit
-    @Override
-    public double getConversionFactor() {
-        return conversionFactor;
-    }
-
-    // Converts given value to base unit (litre)
+    // Converts given value to base unit 
     @Override
     public double convertToBaseUnit(double value) {
         return value * conversionFactor;
     }
 
-    // Converts base unit value (litre) to this unit
+    // Converts base unit value litre to this unit
     @Override
     public double convertFromBaseUnit(double baseValue) {
         return baseValue / conversionFactor;
@@ -38,4 +32,6 @@ public enum VolumeUnit implements IMeasurable {
     public String getUnitName() {
         return name();
     }
+
+
 }
