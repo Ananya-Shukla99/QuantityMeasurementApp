@@ -42,3 +42,20 @@ The scope must remain limited to the current use case requirements.
 Over-engineering or prematurely adding features reduces maintainability and clarity, especially in enterprise environments where domain knowledge may not always be fully available.
 
 ---
+## UC4: Extended Unit Support (Yards & Centimeters)
+
+## Description
+Extends UC3 by adding YARDS (1 yd = 3 ft) and CENTIMETERS (1 cm = 0.393701 in) to the `LengthUnit` enum. No changes to `QuantityLength` class required.
+
+## Flow
+1. Input value + unit (feet/inches/yards/cm) → validate.
+2. Convert both to base unit (feet).
+3. Compare → return `true` / `false`.
+
+## Conversion Factors
+| Unit | Factor (to feet) |
+|------|-----------------|
+| YARDS | 3.0 |
+| CENTIMETERS | ~0.0328 |
+
+---
