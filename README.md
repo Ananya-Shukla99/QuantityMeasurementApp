@@ -42,3 +42,19 @@ The scope must remain limited to the current use case requirements.
 Over-engineering or prematurely adding features reduces maintainability and clarity, especially in enterprise environments where domain knowledge may not always be fully available.
 
 ---
+## UC3: Generic Quantity Class (DRY Principle)
+
+## Description
+Refactors Feet and Inches into a single `QuantityLength` class using a `LengthUnit` enum. Eliminates code duplication and supports cross-unit equality (e.g., 1 foot == 12 inches).
+
+## Flow
+1. Input value + unit type → validate.
+2. Convert both values to base unit (feet).
+3. Compare converted values → return `true` / `false`.
+
+## Key Concepts
+- `LengthUnit` enum with conversion factors
+- Single class handles all unit types (DRY)
+- Cross-unit equality via base unit normalization
+
+---
