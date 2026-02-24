@@ -13,11 +13,6 @@ public enum WeightUnit implements IMeasurable {
 	}
 
 	@Override
-	public double getConversionFactor() {
-		return conversionFactor;
-	}
-
-	@Override
 	public double convertToBaseUnit(double value) {
 		return value * conversionFactor;
 	}
