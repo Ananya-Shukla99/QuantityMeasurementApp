@@ -42,3 +42,21 @@ The scope must remain limited to the current use case requirements.
 Over-engineering or prematurely adding features reduces maintainability and clarity, especially in enterprise environments where domain knowledge may not always be fully available.
 
 ---
+## UC5: Unit-to-Unit Conversion
+
+## Description
+Extends UC4 by exposing an explicit `convert(value, sourceUnit, targetUnit)` method. Normalizes to base unit (feet) then converts to target unit. Introduces method overloading and JavaDoc documentation.
+
+## Flow
+1. Validate value (finite), sourceUnit and targetUnit (non-null).
+2. Convert value → base unit using `sourceUnit.getConversionFactor()`.
+3. Convert base unit → target using `targetUnit.getConversionFactor()`.
+4. Return converted numeric value.
+
+## Key Concepts
+- Method overloading: `demonstrateLengthConversion(double, LengthUnit, LengthUnit)` and `(QuantityLength, LengthUnit)`
+- Private helper methods for encapsulation
+- `toString()` override for readability
+- Formula: `result = value × (source.factor / target.factor)`
+
+---
