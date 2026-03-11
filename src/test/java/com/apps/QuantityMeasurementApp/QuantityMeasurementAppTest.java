@@ -25,9 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 // Testing Class
 class QuantityMeasurementAppTest {
 
-	/**
-	 * UC15 Test Suite — N-Tier Architecture Tests
-	 */
+	// UC15 Test Suite — N-Tier Architecture Tests
 
 	// ── Shared test fixtures ──────────────────────────────────────────────────
 	private IQuantityMeasurementRepository repository;
