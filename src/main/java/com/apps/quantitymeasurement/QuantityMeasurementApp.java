@@ -1,201 +1,92 @@
 package com.apps.quantitymeasurement;
 
+import com.apps.quantitymeasurement.controller.QuantityMeasurementController;
+import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
+import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
+
 public class QuantityMeasurementApp {
 
-	// Common display utility method
-	private static void displayResult(String operation, Object result) {
-		System.out.println(operation + " : " + result);
-	}
-
-	// GENERIC DEMONSTRATION METHODS
-	// Equality demonstration
-	public static <U extends IMeasurable> boolean demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {
-
-		if (q1 == null || q2 == null) {
-			throw new IllegalArgumentException("Quantities cannot be null");
-		}
-
-		boolean result = q1.equals(q2);
-
-		displayResult("Equality Check (" + q1 + ", " + q2 + ")", result);
-
-		return result;
-	}
-
-	// Conversion demonstration
-	public static <U extends IMeasurable> Quantity<U> demonstrateConversion(Quantity<U> quantity, U targetUnit) {
-
-		if (quantity == null) {
-			throw new IllegalArgumentException("Quantity cannot be null");
-		}
-
-		Quantity<U> result = quantity.convertTo(targetUnit);
-
-		displayResult(quantity + " converted to " + targetUnit, result);
-
-		return result;
-	}
-
-	// Addition demonstration (result in first operand unit)
-	public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> q1, Quantity<U> q2) {
-
-		if (q1 == null || q2 == null) {
-			throw new IllegalArgumentException("Quantities cannot be null");
-		}
-
-		Quantity<U> result = q1.add(q2);
-
-		displayResult("Addition (" + q1 + " + " + q2 + ")", result);
-
-		return result;
-	}
-
-	// Addition demonstration with explicit target unit
-	public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> q1, Quantity<U> q2,
-			U targetUnit) {
-
-		if (q1 == null || q2 == null) {
-			throw new IllegalArgumentException("Quantities cannot be null");
-		}
-
-		Quantity<U> result = q1.add(q2, targetUnit);
-
-		displayResult("Addition (" + q1 + " + " + q2 + ") in " + targetUnit, result);
-
-		return result;
-	}
-
-	// Round-trip demonstration
-	public static <U extends IMeasurable> void demonstrateRoundTrip(Quantity<U> quantity, U intermediateUnit) {
-
-		if (quantity == null) {
-			throw new IllegalArgumentException("Quantity cannot be null");
-		}
-
-		Quantity<U> roundTrip = quantity.convertTo(intermediateUnit).convertTo(quantity.getUnit());
-
-		displayResult("Round Trip Test (" + quantity + ")", roundTrip);
-	}
-
-	// Subtraction demonstration
-	public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(Quantity<U> q1, Quantity<U> q2) {
-
-		if (q1 == null || q2 == null) {
-			throw new IllegalArgumentException("Quantities cannot be null");
-		}
-
-		Quantity<U> result = q1.subtract(q2);
-
-		displayResult("Subtraction (" + q1 + " - " + q2 + ")", result);
-
-		return result;
-	}
-
-	// Division demonstration
-	public static <U extends IMeasurable> double demonstrateDivision(Quantity<U> q1, Quantity<U> q2) {
-
-		if (q1 == null || q2 == null) {
-			throw new IllegalArgumentException("Quantities cannot be null");
-		}
-
-		double result = q1.divide(q2);
-
-		displayResult("Division (" + q1 + " / " + q2 + ")", result);
-
-		return result;
-	}
-
-	
-	// MAIN METHOD
 	public static void main(String[] args) {
 
-		// Length method
+		// ── 1. Initialize Repository (Singleton) ─────────────────────────────
+		IQuantityMeasurementRepository repository = QuantityMeasurementCacheRepository.getInstance();
+
+		// ── 2. Initialize Service with injected Repository (Factory + DI) ────
+		IQuantityMeasurementService service = new QuantityMeasurementServiceImpl(repository);
+
+		// ── 3. Initialize Controller with injected Service (Factory + DI) ────
+		QuantityMeasurementController controller = new QuantityMeasurementController(service);
+
+		// LENGTH OPERATIONS
 		System.out.println("***********************************************");
-		Quantity<LengthUnit> length1 = new Quantity<>(1.0, LengthUnit.FEET);
-
-		Quantity<LengthUnit> length2 = new Quantity<>(12.0, LengthUnit.INCH);
-
-		demonstrateEquality(length1, length2);
-		demonstrateConversion(length1, LengthUnit.INCH);
-		demonstrateAddition(length1, length2);
-		demonstrateAddition(length1, length2, LengthUnit.FEET);
-
-		// new updated methods
-		demonstrateSubtraction(length1, length2);
-		demonstrateDivision(length1, length2);
-
-		// Weight method
-		System.out.println("***********************************************");
-		Quantity<WeightUnit> weight1 = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-
-		Quantity<WeightUnit> weight2 = new Quantity<>(1000.0, WeightUnit.GRAM);
-
-		demonstrateEquality(weight1, weight2);
-		demonstrateConversion(weight1, WeightUnit.GRAM);
-
-		Quantity<WeightUnit> weight3 = new Quantity<>(2.20462, WeightUnit.POUND);
-
-		demonstrateAddition(weight1, weight3);
-		demonstrateAddition(weight1, weight3, WeightUnit.GRAM);
-		demonstrateRoundTrip(weight1, WeightUnit.POUND);
-
-		// new updates
-		demonstrateSubtraction(weight1, weight3);
-		demonstrateDivision(weight1, weight3);
-
-		// Volume method
-		System.out.println("***********************************************");
-		Quantity<VolumeUnit> volume1 = new Quantity<>(1.0, VolumeUnit.LITRE);
-
-		Quantity<VolumeUnit> volume2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-
-		demonstrateEquality(volume1, volume2);
-		demonstrateConversion(volume1, VolumeUnit.MILLILITRE);
-		demonstrateAddition(volume1, volume2);
-		demonstrateAddition(volume1, volume2, VolumeUnit.LITRE);
-
-		Quantity<VolumeUnit> volume3 = new Quantity<>(1.0, VolumeUnit.GALLON);
-
-		demonstrateConversion(volume3, VolumeUnit.LITRE);
-		demonstrateAddition(volume1, volume3);
-		demonstrateAddition(volume1, volume3, VolumeUnit.MILLILITRE);
-		demonstrateRoundTrip(volume1, VolumeUnit.GALLON);
-		demonstrateSubtraction(volume1, volume2);
-		demonstrateDivision(volume1, volume2);
-
-		demonstrateSubtraction(volume1, volume3);
-		demonstrateDivision(volume1, volume3);
+		System.out.println("LENGTH OPERATIONS");
 		System.out.println("***********************************************");
 
+		QuantityDTO length1 = new QuantityDTO(1.0, QuantityDTO.LengthUnit.FEET);
+		QuantityDTO length2 = new QuantityDTO(12.0, QuantityDTO.LengthUnit.INCH);
 
-		Quantity<TemperatureUnit> temp1 = new Quantity<>(0.0, TemperatureUnit.CELSIUS);
-		Quantity<TemperatureUnit> temp2 = new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+		controller.performComparison(length1, length2);
+		controller.performConversion(length1, "INCH");
+		controller.performAddition(length1, length2);
+		controller.performAddition(length1, length2, "FEET");
+		controller.performSubtraction(length1, length2);
+		controller.performDivision(length1, length2);
 
-		demonstrateEquality(temp1, temp2);
-		demonstrateConversion(temp1, TemperatureUnit.FAHRENHEIT);
-
-		Quantity<TemperatureUnit> temp3 = new Quantity<>(273.15, TemperatureUnit.KELVIN);
-
-		try {
-		    demonstrateAddition(temp1, temp3, TemperatureUnit.CELSIUS);
-		} catch (UnsupportedOperationException e) {
-		    System.out.println(e.getMessage());
-		}
-
-		try {
-		    demonstrateSubtraction(temp3, temp1);
-		} catch (UnsupportedOperationException e) {
-		    System.out.println(e.getMessage());
-		}
-
-		try {
-		    demonstrateDivision(temp3, temp1.convertTo(TemperatureUnit.KELVIN));
-		} catch (UnsupportedOperationException e) {
-		    System.out.println(e.getMessage());
-		}
-		
+		// WEIGHT OPERATIONS
+		System.out.println("***********************************************");
+		System.out.println("WEIGHT OPERATIONS");
 		System.out.println("***********************************************");
 
+		QuantityDTO weight1 = new QuantityDTO(1.0, QuantityDTO.WeightUnit.KILOGRAM);
+		QuantityDTO weight2 = new QuantityDTO(1000.0, QuantityDTO.WeightUnit.GRAM);
+		QuantityDTO weight3 = new QuantityDTO(2.20462, QuantityDTO.WeightUnit.POUND);
+
+		controller.performComparison(weight1, weight2);
+		controller.performConversion(weight1, "GRAM");
+		controller.performAddition(weight1, weight3);
+		controller.performAddition(weight1, weight3, "GRAM");
+		controller.performSubtraction(weight1, weight3);
+		controller.performDivision(weight1, weight3);
+
+		// VOLUME OPERATIONS
+		System.out.println("***********************************************");
+		System.out.println("VOLUME OPERATIONS");
+		System.out.println("***********************************************");
+
+		QuantityDTO volume1 = new QuantityDTO(1.0, QuantityDTO.VolumeUnit.LITRE);
+		QuantityDTO volume2 = new QuantityDTO(1000.0, QuantityDTO.VolumeUnit.MILLILITRE);
+		QuantityDTO volume3 = new QuantityDTO(1.0, QuantityDTO.VolumeUnit.GALLON);
+
+		controller.performComparison(volume1, volume2);
+		controller.performConversion(volume1, "MILLILITRE");
+		controller.performAddition(volume1, volume2);
+		controller.performAddition(volume1, volume3, "MILLILITRE");
+		controller.performSubtraction(volume1, volume2);
+		controller.performDivision(volume1, volume2);
+
+		// TEMPERATURE OPERATIONS
+		System.out.println("***********************************************");
+		System.out.println("TEMPERATURE OPERATIONS");
+		System.out.println("***********************************************");
+
+		QuantityDTO temp1 = new QuantityDTO(0.0, QuantityDTO.TemperatureUnit.CELSIUS);
+		QuantityDTO temp2 = new QuantityDTO(32.0, QuantityDTO.TemperatureUnit.FAHRENHEIT);
+		QuantityDTO temp3 = new QuantityDTO(273.15, QuantityDTO.TemperatureUnit.KELVIN);
+
+		controller.performComparison(temp1, temp2);
+		controller.performConversion(temp1, "FAHRENHEIT");
+
+		// Temperature does not support arithmetic — controller handles gracefully
+		controller.performAddition(temp1, temp3, "CELSIUS");
+		controller.performSubtraction(temp3, temp1);
+		controller.performDivision(temp3, temp1);
+
+		System.out.println("***********************************************");
+
+		// ── 4. Display repository summary ────────────────────────────────────
+		System.out.println("Total operations saved to repository: " + repository.getAllMeasurements().size());
+		System.out.println("***********************************************");
 	}
-
 }

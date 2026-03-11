@@ -26,4 +26,19 @@ public enum WeightUnit implements IMeasurable {
 	public String getUnitName() {
 		return this.name();
 	}
+
+	@Override
+	public String getMeasurementType() {
+		return this.getClass().getSimpleName();
+	}
+
+	@Override
+	public IMeasurable getUnitInstance(String unitName) {
+		for (WeightUnit unit : WeightUnit.values()) {
+			if (unit.getUnitName().equalsIgnoreCase(unitName)) {
+				return unit;
+			}
+		}
+		throw new IllegalArgumentException("Invalid weight unit: " + unitName);
+	}
 }
