@@ -2,21 +2,20 @@ package com.apps.QuantityMeasurementApp;
 
 import org.junit.jupiter.api.Test;
 
-import com.apps.quantitymeasurement.IMeasurable;
-import com.apps.quantitymeasurement.LengthUnit;
-import com.apps.quantitymeasurement.Quantity;
-import com.apps.quantitymeasurement.QuantityDTO;
-import com.apps.quantitymeasurement.QuantityMeasurementException;
-import com.apps.quantitymeasurement.VolumeUnit;
-import com.apps.quantitymeasurement.WeightUnit;
-
 import com.apps.quantitymeasurement.controller.QuantityMeasurementController;
-import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
-import com.apps.quantitymeasurement.model.QuantityModel;
+import com.apps.quantitymeasurement.entity.QuantityDTO;
+import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
+import com.apps.quantitymeasurement.entity.QuantityModel;
+import com.apps.quantitymeasurement.exception.QuantityMeasurementException;
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
-import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementH2Repository;
 import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
 import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
+import com.apps.quantitymeasurement.unit.IMeasurable;
+import com.apps.quantitymeasurement.unit.LengthUnit;
+import com.apps.quantitymeasurement.unit.Quantity;
+import com.apps.quantitymeasurement.unit.VolumeUnit;
+import com.apps.quantitymeasurement.unit.WeightUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,7 +45,7 @@ class QuantityMeasurementAppTest {
 
 	@BeforeEach
 	void setUp() {
-		repository = QuantityMeasurementCacheRepository.getInstance();
+		repository = QuantityMeasurementH2Repository.getInstance();
 		service = new QuantityMeasurementServiceImpl(repository);
 		controller = new QuantityMeasurementController(service);
 
@@ -276,7 +275,7 @@ class QuantityMeasurementAppTest {
 	@DisplayName("Layer: Service can be tested independently without controller")
 	void testLayerSeparation_ServiceIndependence() {
 		// Create a fresh service with its own repo — no controller needed
-		IQuantityMeasurementRepository freshRepo = QuantityMeasurementCacheRepository.getInstance();
+		IQuantityMeasurementRepository freshRepo = QuantityMeasurementH2Repository.getInstance();
 		IQuantityMeasurementService freshService = new QuantityMeasurementServiceImpl(freshRepo);
 
 		assertTrue(freshService.compare(feet1, inch12));
@@ -455,18 +454,18 @@ class QuantityMeasurementAppTest {
 		assertThrows(Exception.class, () -> nullController.performComparison(feet1, inch12));
 	}
 
-//	@Test
-//	@DisplayName("Service: Polymorphic behavior — works with any IMeasurable unit")
-//	void testService_AllUnitImplementations() {
-//		// LengthUnit
-//		assertDoesNotThrow(() -> service.compare(feet1, inch12));
-//		// WeightUnit
-//		assertDoesNotThrow(() -> service.compare(kg1, gram1000));
-//		// VolumeUnit
-//		assertDoesNotThrow(() -> service.compare(litre1, ml1000));
-//		// TemperatureUnit
-//		assertDoesNotThrow(() -> service.compare(celsius0, fahrenheit32));
-//	}
+	@Test
+	@DisplayName("Service: Polymorphic behavior — works with any IMeasurable unit")
+	void testService_AllUnitImplementations() {
+		// LengthUnit
+		assertDoesNotThrow(() -> service.compare(feet1, inch12));
+		// WeightUnit
+		assertDoesNotThrow(() -> service.compare(kg1, gram1000));
+		// VolumeUnit
+		assertDoesNotThrow(() -> service.compare(litre1, ml1000));
+		// TemperatureUnit
+		assertDoesNotThrow(() -> service.compare(celsius0, fahrenheit32));
+	}
 
 	@Test
 	@DisplayName("Entity: Operation type correctly recorded in entity")
@@ -488,7 +487,7 @@ class QuantityMeasurementAppTest {
 	void testLayerDecoupling_ServiceChange() {
 		// Swap service implementation — controller behavior unchanged
 		IQuantityMeasurementService altService = new QuantityMeasurementServiceImpl(
-				QuantityMeasurementCacheRepository.getInstance());
+				QuantityMeasurementH2Repository.getInstance());
 		QuantityMeasurementController altController = new QuantityMeasurementController(altService);
 
 		// Same result regardless of which service instance is used
