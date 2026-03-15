@@ -1,7 +1,7 @@
 package com.apps.quantitymeasurement.controller;
 
-import com.apps.quantitymeasurement.QuantityDTO;
-import com.apps.quantitymeasurement.QuantityMeasurementException;
+import com.apps.quantitymeasurement.entity.QuantityDTO;
+import com.apps.quantitymeasurement.exception.QuantityMeasurementException;
 import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
 
 public class QuantityMeasurementController {
