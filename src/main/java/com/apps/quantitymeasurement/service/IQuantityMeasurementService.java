@@ -1,6 +1,6 @@
 package com.apps.quantitymeasurement.service;
 
-import com.apps.quantitymeasurement.QuantityDTO;
+import com.apps.quantitymeasurement.entity.QuantityDTO;
 
 public interface IQuantityMeasurementService {
 

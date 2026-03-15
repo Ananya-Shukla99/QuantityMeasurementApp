@@ -1,12 +1,12 @@
 package com.apps.quantitymeasurement.service;
 
-import com.apps.quantitymeasurement.IMeasurable;
-import com.apps.quantitymeasurement.Quantity;
-import com.apps.quantitymeasurement.QuantityDTO;
-import com.apps.quantitymeasurement.QuantityMeasurementException;
-import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
-import com.apps.quantitymeasurement.model.QuantityModel;
+import com.apps.quantitymeasurement.entity.QuantityDTO;
+import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
+import com.apps.quantitymeasurement.entity.QuantityModel;
+import com.apps.quantitymeasurement.exception.QuantityMeasurementException;
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.apps.quantitymeasurement.unit.IMeasurable;
+import com.apps.quantitymeasurement.unit.Quantity;
 
 public class QuantityMeasurementServiceImpl implements IQuantityMeasurementService {
 
@@ -252,13 +252,13 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 	private IMeasurable resolveUnit(String measurementType, String unitName) {
 		switch (measurementType) {
 		case "LengthUnit":
-			return com.apps.quantitymeasurement.LengthUnit.INCH.getUnitInstance(unitName);
+			return com.apps.quantitymeasurement.unit.LengthUnit.INCH.getUnitInstance(unitName);
 		case "WeightUnit":
-			return com.apps.quantitymeasurement.WeightUnit.GRAM.getUnitInstance(unitName);
+			return com.apps.quantitymeasurement.unit.WeightUnit.GRAM.getUnitInstance(unitName);
 		case "VolumeUnit":
-			return com.apps.quantitymeasurement.VolumeUnit.LITRE.getUnitInstance(unitName);
+			return com.apps.quantitymeasurement.unit.VolumeUnit.LITRE.getUnitInstance(unitName);
 		case "TemperatureUnit":
-			return com.apps.quantitymeasurement.TemperatureUnit.CELSIUS.getUnitInstance(unitName);
+			return com.apps.quantitymeasurement.unit.TemperatureUnit.CELSIUS.getUnitInstance(unitName);
 		default:
 			throw new QuantityMeasurementException("Unknown measurement type: " + measurementType);
 		}
