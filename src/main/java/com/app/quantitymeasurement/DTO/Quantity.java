@@ -1,17 +1,14 @@
-package com.app.quantitymeasurement.quantity;
+package com.app.quantitymeasurement.DTO;
 
 import com.app.quantitymeasurement.unit.IMeasurable;
 
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * Quantity is a generic class that holds a value and its unit. Supports
  * arithmetic operations (ADD, SUBTRACT, DIVIDE) and unit conversion.
  */
 public class Quantity<U extends IMeasurable> {
-
-	private static final Logger logger = Logger.getLogger(Quantity.class.getName());
 
 	// ── Rounding Precision ────────────────────────────────────────────────────
 	private static final double ROUNDING_FACTOR = 100.0;

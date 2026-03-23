@@ -2,6 +2,9 @@ package com.app.quantitymeasurement.entity;
 
 import org.junit.Test;
 
+import com.app.quantitymeasurement.model.QuantityDTO;
+import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
+
 import static org.junit.Assert.*;
 
 /**

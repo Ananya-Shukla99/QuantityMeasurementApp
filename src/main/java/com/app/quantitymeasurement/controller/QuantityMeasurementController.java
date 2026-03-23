@@ -1,179 +1,164 @@
 package com.app.quantitymeasurement.controller;
 
-import com.app.quantitymeasurement.entity.QuantityDTO;
-import com.app.quantitymeasurement.exception.QuantityMeasurementException;
+import com.app.quantitymeasurement.DTO.QuantityInputDTO;
+import com.app.quantitymeasurement.DTO.QuantityMeasurementDTO;
 import com.app.quantitymeasurement.service.IQuantityMeasurementService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * QuantityMeasurementController handles all incoming requests
- * and delegates to the service layer for business logic.
- * Catches exceptions and logs results.
- */
+@RestController
+@RequestMapping("/api/v1/quantities")
+@Tag(name = "Quantity Measurements",
+     description = "REST API for quantity measurement operations")
 public class QuantityMeasurementController {
 
     private static final Logger logger = Logger.getLogger(
             QuantityMeasurementController.class.getName()
     );
 
-    // ── Service Dependency (injected via constructor) ─────────────────────────
-    private final IQuantityMeasurementService service;
-
-    // ── Display Separator ─────────────────────────────────────────────────────
-    private static final String SEPARATOR = " : ";
-
-    // ── Constructor ───────────────────────────────────────────────────────────
-    public QuantityMeasurementController(
-            IQuantityMeasurementService service) {
-        this.service = service;
-        logger.info("QuantityMeasurementController initialized.");
-    }
+    // ── Service injected by Spring ────────────────────────────────────────────
+    @Autowired
+    private IQuantityMeasurementService service;
 
     // ── COMPARE ───────────────────────────────────────────────────────────────
-
-    /**
-     * Performs equality comparison between two quantities.
-     */
-    public boolean performComparison(QuantityDTO q1, QuantityDTO q2) {
+    @PostMapping("/compare")
+    @Operation(summary = "Compare two quantities")
+    public ResponseEntity<QuantityMeasurementDTO> performComparison(
+            @RequestBody QuantityInputDTO input) {
         try {
-            boolean result = service.compare(q1, q2);
-            displayResult(
-                    "Equality Check (" + q1 + ", " + q2 + ")",
-                    result
-            );
-            logger.info("COMPARE: " + q1 + " vs " + q2
-                    + " → " + result);
-            return result;
-
-        } catch (QuantityMeasurementException e) {
+            QuantityMeasurementDTO result = service.compare(
+                    input.getQuantity1(), input.getQuantity2());
+            logger.info("COMPARE: " + input.getQuantity1()
+                    + " vs " + input.getQuantity2());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
             logger.severe("Comparison Error: " + e.getMessage());
-            System.out.println("Comparison Error: " + e.getMessage());
-            return false;
+            return ResponseEntity.badRequest().build();
         }
     }
 
     // ── CONVERT ───────────────────────────────────────────────────────────────
-
-    /**
-     * Performs unit conversion on a given quantity.
-     */
-    public QuantityDTO performConversion(QuantityDTO quantity,
-                                         String targetUnit) {
+    @PostMapping("/convert")
+    @Operation(summary = "Convert a quantity to a target unit")
+    public ResponseEntity<QuantityMeasurementDTO> performConversion(
+            @RequestBody QuantityInputDTO input) {
         try {
-            QuantityDTO result = service.convert(quantity, targetUnit);
-            displayResult(
-                    quantity + " converted to " + targetUnit,
-                    result
-            );
-            logger.info("CONVERT: " + quantity
-                    + " → " + targetUnit + " = " + result);
-            return result;
-
-        } catch (QuantityMeasurementException e) {
+            QuantityMeasurementDTO result = service.convert(
+                    input.getQuantity1(), input.getTargetUnit());
+            logger.info("CONVERT: " + input.getQuantity1()
+                    + " → " + input.getTargetUnit());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
             logger.severe("Conversion Error: " + e.getMessage());
-            System.out.println("Conversion Error: " + e.getMessage());
-            return null;
+            return ResponseEntity.badRequest().build();
         }
     }
 
     // ── ADD ───────────────────────────────────────────────────────────────────
-
-    /**
-     * Performs addition — result in unit of first operand.
-     */
-    public QuantityDTO performAddition(QuantityDTO q1, QuantityDTO q2) {
+    @PostMapping("/add")
+    @Operation(summary = "Add two quantities")
+    public ResponseEntity<QuantityMeasurementDTO> performAddition(
+            @RequestBody QuantityInputDTO input) {
         try {
-            QuantityDTO result = service.add(q1, q2);
-            displayResult(
-                    "Addition (" + q1 + " + " + q2 + ")",
-                    result
-            );
-            logger.info("ADD: " + q1 + " + " + q2 + " → " + result);
-            return result;
-
-        } catch (QuantityMeasurementException e) {
+            QuantityMeasurementDTO result;
+            if (input.getTargetUnit() != null) {
+                result = service.add(
+                        input.getQuantity1(),
+                        input.getQuantity2(),
+                        input.getTargetUnit());
+            } else {
+                result = service.add(
+                        input.getQuantity1(),
+                        input.getQuantity2());
+            }
+            logger.info("ADD: " + input.getQuantity1()
+                    + " + " + input.getQuantity2());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
             logger.severe("Addition Error: " + e.getMessage());
-            System.out.println("Addition Error: " + e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Performs addition — result in specified target unit.
-     */
-    public QuantityDTO performAddition(QuantityDTO q1, QuantityDTO q2,
-                                        String targetUnit) {
-        try {
-            QuantityDTO result = service.add(q1, q2, targetUnit);
-            displayResult(
-                    "Addition (" + q1 + " + " + q2
-                    + ") in " + targetUnit,
-                    result
-            );
-            logger.info("ADD (target: " + targetUnit + "): "
-                    + q1 + " + " + q2 + " → " + result);
-            return result;
-
-        } catch (QuantityMeasurementException e) {
-            logger.severe("Addition Error: " + e.getMessage());
-            System.out.println("Addition Error: " + e.getMessage());
-            return null;
+            return ResponseEntity.badRequest().build();
         }
     }
 
     // ── SUBTRACT ──────────────────────────────────────────────────────────────
-
-    /**
-     * Performs subtraction of second quantity from first.
-     */
-    public QuantityDTO performSubtraction(QuantityDTO q1, QuantityDTO q2) {
+    @PostMapping("/subtract")
+    @Operation(summary = "Subtract two quantities")
+    public ResponseEntity<QuantityMeasurementDTO> performSubtraction(
+            @RequestBody QuantityInputDTO input) {
         try {
-            QuantityDTO result = service.subtract(q1, q2);
-            displayResult(
-                    "Subtraction (" + q1 + " - " + q2 + ")",
-                    result
-            );
-            logger.info("SUBTRACT: " + q1 + " - " + q2
-                    + " → " + result);
-            return result;
-
-        } catch (QuantityMeasurementException e) {
+            QuantityMeasurementDTO result = service.subtract(
+                    input.getQuantity1(), input.getQuantity2());
+            logger.info("SUBTRACT: " + input.getQuantity1()
+                    + " - " + input.getQuantity2());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
             logger.severe("Subtraction Error: " + e.getMessage());
-            System.out.println("Subtraction Error: " + e.getMessage());
-            return null;
+            return ResponseEntity.badRequest().build();
         }
     }
 
     // ── DIVIDE ────────────────────────────────────────────────────────────────
-
-    /**
-     * Performs division of first quantity by second.
-     */
-    public double performDivision(QuantityDTO q1, QuantityDTO q2) {
+    @PostMapping("/divide")
+    @Operation(summary = "Divide two quantities")
+    public ResponseEntity<QuantityMeasurementDTO> performDivision(
+            @RequestBody QuantityInputDTO input) {
         try {
-            double result = service.divide(q1, q2);
-            displayResult(
-                    "Division (" + q1 + " / " + q2 + ")",
-                    result
-            );
-            logger.info("DIVIDE: " + q1 + " / " + q2
-                    + " → " + result);
-            return result;
-
-        } catch (QuantityMeasurementException e) {
+            QuantityMeasurementDTO result = service.divide(
+                    input.getQuantity1(), input.getQuantity2());
+            logger.info("DIVIDE: " + input.getQuantity1()
+                    + " / " + input.getQuantity2());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
             logger.severe("Division Error: " + e.getMessage());
-            System.out.println("Division Error: " + e.getMessage());
-            return 0.0;
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    // ── DISPLAY UTILITY ───────────────────────────────────────────────────────
+    // ── HISTORY ───────────────────────────────────────────────────────────────
+    @GetMapping("/history/{operation}")
+    @Operation(summary = "Get operation history by operation type")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getOperationHistory(
+            @PathVariable String operation) {
+        try {
+            List<QuantityMeasurementDTO> history =
+                    service.getHistoryByOperation(operation);
+            return ResponseEntity.ok(history);
+        } catch (Exception e) {
+            logger.severe("History Error: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
-    /**
-     * Prints operation result to console.
-     */
-    private void displayResult(String operation, Object result) {
-        System.out.println(operation + SEPARATOR + result);
+    @GetMapping("/history/type/{measurementType}")
+    @Operation(summary = "Get history by measurement type")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getHistoryByType(
+            @PathVariable String measurementType) {
+        try {
+            List<QuantityMeasurementDTO> history =
+                    service.getHistoryByMeasurementType(measurementType);
+            return ResponseEntity.ok(history);
+        } catch (Exception e) {
+            logger.severe("History Error: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/count/{operation}")
+    @Operation(summary = "Get count of successful operations")
+    public ResponseEntity<Long> getOperationCount(
+            @PathVariable String operation) {
+        try {
+            long count = service.getOperationCount(operation);
+            return ResponseEntity.ok(count);
+        } catch (Exception e) {
+            logger.severe("Count Error: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

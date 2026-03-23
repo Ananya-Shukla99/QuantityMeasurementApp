@@ -1,8 +1,8 @@
 package com.app.quantitymeasurement.integrationTests;
 
 import com.app.quantitymeasurement.controller.QuantityMeasurementController;
-import com.app.quantitymeasurement.entity.QuantityDTO;
-import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.model.QuantityDTO;
+import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.repository.IQuantityMeasurementRepository;
 import com.app.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
 import com.app.quantitymeasurement.repository.QuantityMeasurementDatabaseRepository;

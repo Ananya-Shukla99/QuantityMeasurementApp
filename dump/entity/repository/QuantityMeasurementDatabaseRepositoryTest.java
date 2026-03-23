@@ -1,10 +1,10 @@
 package com.app.quantitymeasurement.repository;
 
-import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
 
 import java.util.List;
 
