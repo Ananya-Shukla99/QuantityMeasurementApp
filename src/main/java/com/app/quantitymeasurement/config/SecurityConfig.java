@@ -29,10 +29,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
             );
 
-        // For H2 Console
-        http.headers(headers -> headers
-            .frameOptions(frame -> frame.disable()));
-
+       
         return http.build();
     }
 
