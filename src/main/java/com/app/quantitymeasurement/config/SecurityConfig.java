@@ -20,7 +20,7 @@ public class SecurityConfig {
             throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            // Disable CSRF - Required for REST APIs
+            // Disable CSRF - Required fora REST APIs
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -29,7 +29,8 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
             );
 
-       
+        http.headers(headers -> headers
+        	    .frameOptions(frame -> frame.disable()));
         return http.build();
     }
 
