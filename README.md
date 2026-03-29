@@ -70,6 +70,7 @@ transaction management and comprehensive test coverage.
 | `getPoolStatistics()` | Connection pool stats |
 | `releaseResources()` | Shutdown pool |
 
+
 **Database Schema:**
 ```sql
 quantity_measurement_entity   ← main table
