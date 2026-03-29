@@ -3,11 +3,12 @@
 *.class
 *.project
 *.settings
-
+*.env
+*.properties
 bin
 module-info.java
 .mvn/
-pom.xml
+
 target/
  .factorypath
  data/quantity_measurement.trace.db

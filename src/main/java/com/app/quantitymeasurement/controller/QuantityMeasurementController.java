@@ -1,7 +1,7 @@
 package com.app.quantitymeasurement.controller;
 
-import com.app.quantitymeasurement.DTO.QuantityInputDTO;
-import com.app.quantitymeasurement.DTO.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.dto.request.QuantityInputDTO;
+import com.app.quantitymeasurement.dto.request.QuantityMeasurementDTO;
 import com.app.quantitymeasurement.service.IQuantityMeasurementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -159,6 +159,15 @@ public class QuantityMeasurementController {
         } catch (Exception e) {
             logger.severe("Count Error: " + e.getMessage());
             return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @RestController
+    public class HomeController {
+
+        @GetMapping("/")
+        public String home() {
+            return "Quantity Measurement Backend is running!";
         }
     }
 }

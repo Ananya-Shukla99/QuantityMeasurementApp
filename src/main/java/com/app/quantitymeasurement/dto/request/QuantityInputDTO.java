@@ -1,7 +1,10 @@
-package com.app.quantitymeasurement.DTO;
+package com.app.quantitymeasurement.dto.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.app.quantitymeasurement.dto.response.QuantityDTO;
+
 import lombok.AllArgsConstructor;
 
 @Data

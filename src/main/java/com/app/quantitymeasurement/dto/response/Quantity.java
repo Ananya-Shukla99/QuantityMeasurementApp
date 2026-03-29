@@ -1,4 +1,4 @@
-package com.app.quantitymeasurement.DTO;
+package com.app.quantitymeasurement.dto.response;
 
 import com.app.quantitymeasurement.unit.IMeasurable;
 

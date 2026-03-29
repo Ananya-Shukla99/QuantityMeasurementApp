@@ -1,8 +1,8 @@
 package com.app.quantitymeasurement.controller;
 
-import com.app.quantitymeasurement.DTO.QuantityDTO;
-import com.app.quantitymeasurement.DTO.QuantityInputDTO;
-import com.app.quantitymeasurement.DTO.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.dto.request.QuantityInputDTO;
+import com.app.quantitymeasurement.dto.request.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.dto.response.QuantityDTO;
 import com.app.quantitymeasurement.service.IQuantityMeasurementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,3 +1,5 @@
+-- src/test/resources/schema.sql
+
 -- =============================================================================
 -- Quantity Measurement App — TEST Schema
 -- UC16 | H2 In-Memory Database
@@ -7,6 +9,20 @@
 -- Clean start
 DROP TABLE IF EXISTS quantity_measurement_history;
 DROP TABLE IF EXISTS quantity_measurement_entity;
+DROP TABLE IF EXISTS users;
+
+-- =============================================================================
+-- Users Table
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS users (
+
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email       VARCHAR(255) NOT NULL UNIQUE,
+    name        VARCHAR(100) NOT NULL,
+    password    VARCHAR(255) NOT NULL,
+    role        VARCHAR(20)  NOT NULL DEFAULT 'ROLE_USER'
+
+);
 
 -- =============================================================================
 -- Main Table
@@ -40,8 +56,9 @@ CREATE TABLE IF NOT EXISTS quantity_measurement_entity (
     is_error                 BOOLEAN      DEFAULT FALSE,
     error_message            VARCHAR(500),
 
-    -- Timestamp
-    created_at               TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+    -- Timestamps                          ← both columns now present
+    created_at               TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at               TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 
 );
 
@@ -51,11 +68,12 @@ CREATE TABLE IF NOT EXISTS quantity_measurement_entity (
 CREATE TABLE IF NOT EXISTS quantity_measurement_history (
 
     id               BIGINT AUTO_INCREMENT PRIMARY KEY,
-    entity_id        BIGINT  NOT NULL,
-    operation_count  INT     DEFAULT 1,
+    entity_id        BIGINT    NOT NULL,
+    operation_count  INT       DEFAULT 1,
     created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (entity_id)
         REFERENCES quantity_measurement_entity(id)
             ON DELETE CASCADE
+
 );
