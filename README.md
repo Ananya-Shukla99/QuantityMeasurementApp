@@ -42,45 +42,16 @@ The scope must remain limited to the current use case requirements.
 Over-engineering or prematurely adding features reduces maintainability and clarity, especially in enterprise environments where domain knowledge may not always be fully available.
 
 ---
+### UC17 – Spring Backend for Quantity Measurement
 
-### UC16 — JDBC Database Integration
-**Description:**
-Introduces professional database persistence through
-JDBC with H2 embedded database, connection pooling,
-transaction management and comprehensive test coverage.
-
-**Key Features:**
-- `DatabaseConfig` — loads config from `application.properties`
-- `ConnectionPool` — manages reusable JDBC connections
-- `QuantityMeasurementDatabaseRepository` — full CRUD operations
-- Transaction management (commit/rollback)
-- SQL injection prevention via PreparedStatement
-- Separate production and test databases
-- Full unit and integration test coverage
-
-**Repository Operations:**
-| Method | Description |
-|--------|-------------|
-| `save()` | Persists entity to database |
-| `getAllMeasurements()` | Retrieves all records |
-| `findByOperation()` | Filter by operation type |
-| `findByMeasurementType()` | Filter by measurement type |
-| `getCount()` | Total record count |
-| `deleteAll()` | Clear all records |
-| `getPoolStatistics()` | Connection pool stats |
-| `releaseResources()` | Shutdown pool |
-
-**Database Schema:**
-```sql
-quantity_measurement_entity   ← main table
-quantity_measurement_history  ← audit trail
-```
-
-**Switch Repository:**
-```properties
-# application.properties
-app.repository.type=database  ← use H2 database
-app.repository.type=cache     ← use in-memory cache
-```
-
----
+- Migrates the backend of the Quantity Measurement Application to a **Spring-based architecture** for enterprise-grade scalability and maintainability  
+- Introduces **Spring Boot** to simplify project setup, dependency management, application configuration, and runtime execution  
+- Applies core **Spring concepts** such as **Inversion of Control (IoC)** and **Dependency Injection (DI)** to manage components cleanly  
+- Builds RESTful APIs using **Spring MVC** and **Spring Controllers** for quantity operations such as comparison, conversion, and arithmetic  
+- Moves business rules into dedicated **Spring Services**, keeping controllers lightweight and focused on request handling  
+- Establishes a structured backend design using layered architecture with controllers, services, and repositories  
+- Integrates persistence more cleanly through **Spring Data / JPA concepts** for improved database interaction and future ORM support  
+- Uses **Spring Scopes** and managed beans to control object lifecycle where appropriate  
+- Adds application-level **logging** for request tracing, debugging, and operational visibility  
+- Improves maintainability, modularity, and testability through Spring’s ecosystem and annotation-driven development  
+- Provides a scalable backend foundation for authentication, frontend integration, and future deployment  
