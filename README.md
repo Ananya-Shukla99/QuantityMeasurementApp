@@ -363,3 +363,16 @@ app.repository.type=cache     ← use in-memory cache
 ```
 
 ---
+### UC17 – Spring Backend for Quantity Measurement
+
+- Migrates the backend of the Quantity Measurement Application to a **Spring-based architecture** for enterprise-grade scalability and maintainability  
+- Introduces **Spring Boot** to simplify project setup, dependency management, application configuration, and runtime execution  
+- Applies core **Spring concepts** such as **Inversion of Control (IoC)** and **Dependency Injection (DI)** to manage components cleanly  
+- Builds RESTful APIs using **Spring MVC** and **Spring Controllers** for quantity operations such as comparison, conversion, and arithmetic  
+- Moves business rules into dedicated **Spring Services**, keeping controllers lightweight and focused on request handling  
+- Establishes a structured backend design using layered architecture with controllers, services, and repositories  
+- Integrates persistence more cleanly through **Spring Data / JPA concepts** for improved database interaction and future ORM support  
+- Uses **Spring Scopes** and managed beans to control object lifecycle where appropriate  
+- Adds application-level **logging** for request tracing, debugging, and operational visibility  
+- Improves maintainability, modularity, and testability through Spring’s ecosystem and annotation-driven development  
+- Provides a scalable backend foundation for authentication, frontend integration, and future deployment  
