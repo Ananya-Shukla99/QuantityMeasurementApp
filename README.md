@@ -375,4 +375,18 @@ app.repository.type=cache     ← use in-memory cache
 - Uses **Spring Scopes** and managed beans to control object lifecycle where appropriate  
 - Adds application-level **logging** for request tracing, debugging, and operational visibility  
 - Improves maintainability, modularity, and testability through Spring’s ecosystem and annotation-driven development  
-- Provides a scalable backend foundation for authentication, frontend integration, and future deployment  
+- Provides a scalable backend foundation for authentication, frontend integration, and future deployment
+-  
+---
+### UC18 – Google Authentication and User Management for Quantity Measurement
+
+- Introduces secure **user authentication and authorization** for the Quantity Measurement Application  
+- Integrates **Google Authentication** using **OAuth 2.0** for simplified and secure third-party login  
+- Adds **user management** capabilities to support authenticated access to application features and personalized data handling  
+- Uses **Spring Security** to protect application endpoints and enforce access control rules  
+- Implements **JWT (JSON Web Token)** based authentication for stateless session handling in REST APIs  
+- Combines **OAuth 2.0 + JWT** to authenticate users via Google and issue application-level secure tokens  
+- Secures backend APIs so only authorized users can access protected quantity operations or persisted records  
+- Improves user session management while maintaining scalability for frontend and API clients  
+- Establishes a foundation for role-based access, account linking, and future identity provider integrations  
+- Enhances the application’s production readiness with modern security practices and clean authentication flow  
