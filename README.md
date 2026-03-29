@@ -322,3 +322,44 @@ com.apps.quantitymeasurement
 - Basic JDBC connection management
 
 ---
+### UC16 — JDBC Database Integration
+**Description:**
+Introduces professional database persistence through
+JDBC with H2 embedded database, connection pooling,
+transaction management and comprehensive test coverage.
+
+**Key Features:**
+- `DatabaseConfig` — loads config from `application.properties`
+- `ConnectionPool` — manages reusable JDBC connections
+- `QuantityMeasurementDatabaseRepository` — full CRUD operations
+- Transaction management (commit/rollback)
+- SQL injection prevention via PreparedStatement
+- Separate production and test databases
+- Full unit and integration test coverage
+
+**Repository Operations:**
+| Method | Description |
+|--------|-------------|
+| `save()` | Persists entity to database |
+| `getAllMeasurements()` | Retrieves all records |
+| `findByOperation()` | Filter by operation type |
+| `findByMeasurementType()` | Filter by measurement type |
+| `getCount()` | Total record count |
+| `deleteAll()` | Clear all records |
+| `getPoolStatistics()` | Connection pool stats |
+| `releaseResources()` | Shutdown pool |
+
+**Database Schema:**
+```sql
+quantity_measurement_entity   ← main table
+quantity_measurement_history  ← audit trail
+```
+
+**Switch Repository:**
+```properties
+# application.properties
+app.repository.type=database  ← use H2 database
+app.repository.type=cache     ← use in-memory cache
+```
+
+---
