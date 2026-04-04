@@ -1,0 +1,27 @@
+# Environment files
+.env
+
+# Ignore all Markdown documentation files in root
+/*.md
+
+#  Java / Maven ignores
+target/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.bat
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+.metadata/
+
+# OS files
+.DS_Store
+Thumbs.db
