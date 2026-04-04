@@ -436,7 +436,7 @@ app.repository.type=cache     ← use in-memory cache
 - Enhances the application’s production readiness with modern security practices and clean authentication flow
 
 ---
-# Quantity Measurement Microservices
+## UC21: Quantity Measurement Microservices
 
 This project is a Spring Boot microservices setup for quantity conversion and comparison.
 
