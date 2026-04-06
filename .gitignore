@@ -5,6 +5,8 @@
 *.settings
 *.env
 *.properties
+*.md
+*.bat
 bin
 module-info.java
 .mvn/

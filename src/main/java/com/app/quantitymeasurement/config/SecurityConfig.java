@@ -40,7 +40,7 @@ public class SecurityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final PasswordEncoder passwordEncoder; // injected, not declared here
 
-    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:8080}")
+    @Value("${app.cors.allowed-origins:https://quantity-measurement-app-frontend-olive.vercel.app,http://localhost:4200,http://localhost:4300,http://localhost:3000,http://localhost:8080}")
     private List<String> allowedOrigins;
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
@@ -73,9 +73,9 @@ public class SecurityConfig {
                     .successHandler(oAuth2LoginSuccessHandler)
                     .failureHandler((request, response, exception) -> {
                         log.error("OAuth2 login failed: {}", exception.getMessage());
-                        response.sendRedirect(
-                            allowedOrigins.get(0) + "/login?error=oauth2_failed"
-                        );
+                        // Redirect to frontend login with error
+                        String frontendUrl = "https://quantity-measurement-app-frontend-olive.vercel.app/login?error=oauth2_failed";
+                        response.sendRedirect(frontendUrl);
                     })
             )
             .exceptionHandling(ex -> ex
